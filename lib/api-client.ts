@@ -92,7 +92,8 @@ export class ApiClient {
         this.config.setAccessToken(json.data.access_token);
         this.config.setRefreshToken(json.data.refresh_token);
         return json.data.access_token as string;
-      } catch {
+      } catch (err) {
+        console.warn("Token refresh failed:", err);
         this.config.onAuthFailure?.();
         return null;
       } finally {

@@ -72,7 +72,8 @@ export function AuthProvider({ baseUrl, children }: { baseUrl: string; children:
       try {
         const me = await apiClient.auth.me();
         if (!cancelled) setUser(normalizeUser(me));
-      } catch {
+      } catch (err) {
+        console.warn("Failed to fetch user on mount:", err);
         tokenStorage.clear();
       } finally {
         if (!cancelled) setLoading(false);

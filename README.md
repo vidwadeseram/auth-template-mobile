@@ -1,6 +1,6 @@
 # Auth Template — Mobile (Expo)
 
-React Native mobile app template with authentication flows. Built with Expo SDK 52, Expo Router, and TypeScript.
+React Native mobile app template with authentication flows. Built with Expo SDK 55, Expo Router, and TypeScript.
 
 Works with **all 6 backend auth templates** — Python, Rust, Go × single-tenant and multi-tenant.
 
@@ -18,7 +18,7 @@ Works with **all 6 backend auth templates** — Python, Rust, Go × single-tenan
 
 ## Tech Stack
 
-- **Expo SDK 52** (managed workflow)
+- **Expo SDK 55** (managed workflow)
 - **Expo Router 6** (file-based routing)
 - **TypeScript** (strict)
 - **React Native** (iOS + Android + Web)
