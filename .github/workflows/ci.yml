@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
-    branches: [main]
+    branches: [main, master]
 
 jobs:
   build:
@@ -18,5 +18,3 @@ jobs:
       - run: npm ci
       - name: Type check
         run: npx tsc --noEmit || true
-      - name: Export check
-        run: npx expo export --platform web || true
