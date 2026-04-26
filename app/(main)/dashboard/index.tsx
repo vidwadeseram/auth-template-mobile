@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { useAuth } from "../../lib/auth-context";
-import { Colors } from "../../constants/Colors";
+import { useAuth } from "../../../lib/auth-context";
+import { Colors } from "../../../constants/Colors";
 import { useColorScheme } from "react-native";
 import { useRouter } from "expo-router";
 

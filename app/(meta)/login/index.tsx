@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { useAuth } from "../../lib/auth-context";
-import { AuthForm } from "../../components/AuthForm";
-import { LinkButton } from "../../components/LinkButton";
+import { useAuth } from "../../../lib/auth-context";
+import { AuthForm } from "../../../components/AuthForm";
+import { LinkButton } from "../../../components/LinkButton";
 import { View } from "react-native";
 
 export default function LoginScreen() {

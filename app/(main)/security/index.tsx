@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from "react-native";
-import { useAuth } from "../../lib/auth-context";
-import { Colors } from "../../constants/Colors";
+import { useAuth } from "../../../lib/auth-context";
+import { Colors } from "../../../constants/Colors";
 import { useColorScheme } from "react-native";
 
 export default function SecurityScreen() {

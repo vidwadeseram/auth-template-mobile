@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAuth } from "../../lib/auth-context";
-import { AuthForm } from "../../components/AuthForm";
-import { LinkButton } from "../../components/LinkButton";
+import { useAuth } from "../../../lib/auth-context";
+import { AuthForm } from "../../../components/AuthForm";
+import { LinkButton } from "../../../components/LinkButton";
 import { Text, View } from "react-native";
-import { Colors } from "../../constants/Colors";
+import { Colors } from "../../../constants/Colors";
 import { useColorScheme } from "react-native";
 
 export default function ForgotPasswordScreen() {
