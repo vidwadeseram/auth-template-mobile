@@ -5,7 +5,7 @@ import { Colors } from "../../../constants/Colors";
 import { useColorScheme } from "react-native";
 
 export default function SecurityScreen() {
-  const theme = useColorScheme() ?? "light";
+  const theme: "light" | "dark" = useColorScheme() === "dark" ? "dark" : "light";
   const colors = Colors[theme];
   const [form, setForm] = useState({ current_password: "", new_password: "", confirm_password: "" });
   const [loading, setLoading] = useState(false);

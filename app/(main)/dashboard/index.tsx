@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 
 export default function DashboardScreen() {
   const { user, logout } = useAuth();
-  const theme = useColorScheme() ?? "light";
+  const theme: "light" | "dark" = useColorScheme() === "dark" ? "dark" : "light";
   const colors = Colors[theme];
   const router = useRouter();
 

@@ -11,7 +11,7 @@ export default function ForgotPasswordScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
-  const theme = useColorScheme() ?? "light";
+  const theme: "light" | "dark" = useColorScheme() === "dark" ? "dark" : "light";
   const colors = Colors[theme];
 
   async function handleSubmit(values: Record<string, string>) {

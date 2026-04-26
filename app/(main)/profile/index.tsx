@@ -5,7 +5,7 @@ import { useColorScheme } from "react-native";
 
 export default function ProfileScreen() {
   const { user } = useAuth();
-  const theme = useColorScheme() ?? "light";
+  const theme: "light" | "dark" = useColorScheme() === "dark" ? "dark" : "light";
   const colors = Colors[theme];
 
   const fields = [

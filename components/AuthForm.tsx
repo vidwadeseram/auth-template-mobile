@@ -24,7 +24,7 @@ interface AuthFormProps {
 }
 
 export function AuthForm({ title, subtitle, fields, buttonTitle, onSubmit, loading, error, footer }: AuthFormProps) {
-  const theme = useColorScheme() ?? "light";
+  const theme: "light" | "dark" = useColorScheme() === "dark" ? "dark" : "light";
   const colors = Colors[theme];
   const [values, setValues] = useState<Record<string, string>>(
     Object.fromEntries(fields.map((f) => [f.key, ""]))

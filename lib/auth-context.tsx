@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { createApiClient, type ApiClient } from "./api-client";
+import { tokenStorage } from "./token-storage";
 
 interface AuthUser {
   id: string;
@@ -43,22 +44,47 @@ function normalizeUser(raw: any): AuthUser {
 export function AuthProvider({ baseUrl, children }: { baseUrl: string; children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const apiClientRef = useRef<ApiClient | null>(null);
 
-  const apiClient = createApiClient({
-    baseUrl,
-    getAccessToken: () => null, // React Native: use secure storage in production
-    setAccessToken: () => {},
-    getRefreshToken: () => null,
-    setRefreshToken: () => {},
-    onAuthFailure: () => setUser(null),
-  });
+  if (apiClientRef.current === null) {
+    apiClientRef.current = createApiClient({
+      baseUrl,
+      getAccessToken: tokenStorage.getAccessToken,
+      setAccessToken: tokenStorage.setAccessToken,
+      getRefreshToken: tokenStorage.getRefreshToken,
+      setRefreshToken: tokenStorage.setRefreshToken,
+      onAuthFailure: () => {
+        tokenStorage.clear();
+        setUser(null);
+      },
+    });
+  }
+  const apiClient = apiClientRef.current;
 
   useEffect(() => {
-    setLoading(false);
-  }, []);
+    let cancelled = false;
+    (async () => {
+      const { access } = await tokenStorage.loadInitial();
+      if (!access) {
+        if (!cancelled) setLoading(false);
+        return;
+      }
+      try {
+        const me = await apiClient.auth.me();
+        if (!cancelled) setUser(normalizeUser(me));
+      } catch {
+        tokenStorage.clear();
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [apiClient]);
 
   const login = useCallback(async (email: string, password: string) => {
     const data = await apiClient.auth.login({ email, password });
+    tokenStorage.setAccessToken(data.access_token);
+    tokenStorage.setRefreshToken(data.refresh_token);
     const me = await apiClient.auth.me();
     setUser(normalizeUser(me));
   }, [apiClient]);
@@ -68,8 +94,13 @@ export function AuthProvider({ baseUrl, children }: { baseUrl: string; children:
   }, [apiClient]);
 
   const logout = useCallback(async () => {
+    const rt = tokenStorage.getRefreshToken();
+    if (rt) {
+      try { await apiClient.auth.logout(rt); } catch { /* ignore — clearing locally regardless */ }
+    }
+    tokenStorage.clear();
     setUser(null);
-  }, []);
+  }, [apiClient]);
 
   const verifyEmail = useCallback(async (token: string) => {
     await apiClient.auth.verifyEmail(token);

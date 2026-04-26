@@ -6,7 +6,7 @@ import { useColorScheme } from "react-native";
 
 export default function SettingsScreen() {
   const { user } = useAuth();
-  const theme = useColorScheme() ?? "light";
+  const theme: "light" | "dark" = useColorScheme() === "dark" ? "dark" : "light";
   const colors = Colors[theme];
   const [form, setForm] = useState({ first_name: user?.first_name || "", last_name: user?.last_name || "" });
   const [loading, setLoading] = useState(false);
