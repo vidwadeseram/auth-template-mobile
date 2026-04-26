@@ -5,7 +5,7 @@ import { Colors } from "../../../constants/Colors";
 import { useColorScheme } from "react-native";
 
 export default function SettingsScreen() {
-  const { user } = useAuth();
+  const { user, apiClient } = useAuth();
   const theme: "light" | "dark" = useColorScheme() === "dark" ? "dark" : "light";
   const colors = Colors[theme];
   const [form, setForm] = useState({ first_name: user?.first_name || "", last_name: user?.last_name || "" });
@@ -14,8 +14,17 @@ export default function SettingsScreen() {
 
   async function handleSave() {
     setLoading(true);
-    // API call would go here
-    setTimeout(() => { setLoading(false); setSaved(true); }, 500);
+    try {
+      await apiClient.patch("/api/v1/auth/me", {
+        first_name: form.first_name,
+        last_name: form.last_name,
+      });
+      setSaved(true);
+    } catch (err) {
+      console.warn("Failed to update profile:", err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

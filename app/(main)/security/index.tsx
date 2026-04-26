@@ -5,6 +5,7 @@ import { Colors } from "../../../constants/Colors";
 import { useColorScheme } from "react-native";
 
 export default function SecurityScreen() {
+  const { apiClient } = useAuth();
   const theme: "light" | "dark" = useColorScheme() === "dark" ? "dark" : "light";
   const colors = Colors[theme];
   const [form, setForm] = useState({ current_password: "", new_password: "", confirm_password: "" });
@@ -15,8 +16,17 @@ export default function SecurityScreen() {
     if (form.new_password !== form.confirm_password) { setError("Passwords do not match"); return; }
     setError("");
     setLoading(true);
-    // API call would go here
-    setTimeout(() => { setLoading(false); setForm({ current_password: "", new_password: "", confirm_password: "" }); }, 500);
+    try {
+      await apiClient.post("/api/v1/auth/change-password", {
+        current_password: form.current_password,
+        new_password: form.new_password,
+      });
+      setForm({ current_password: "", new_password: "", confirm_password: "" });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to change password");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
